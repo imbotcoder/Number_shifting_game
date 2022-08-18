@@ -1,0 +1,264 @@
+#include<stdio.h>               //Contains standard input and output function for C.
+#include<stdlib.h>              //Contains srand() and rand() functions.
+#include<time.h>                //Contains time() function.
+#include<conio.h>               //Contains getch() function.
+
+void rand_arrangement(int*);                //Randomly arranges number in array.
+void display(int[4][4]);                     //Display Matrix on screen.
+void set_game_plate(int[4][4],int[]);         //Prepares the stage (i.e randomly arranged matrix) for game_play.
+void game_play(int[4][4],int[]);              //Game execution and responses to arrow key are defined in this function.
+void exit_message();
+void acknowledgement(int[4][4]);
+void About_creator();
+void content(int[4][4],int[4][4],int[]);    //Contains contents of project.
+int main(){
+    int array[16]={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
+    int winning_situation[4][4]={0};
+    set_game_plate(winning_situation,array);
+
+    int game_plate[4][4]={0};
+
+    content(winning_situation,game_plate,array);
+
+}
+void content(int winning_situation[4][4],int game_plate[4][4],int array[]){
+    int op;
+    do{
+        system("cls");
+        system("color 05");
+        printf("\n\n\n\n\n\n");
+        printf("\t\t\t\t\t\t1.Acknowledgement and Introduction\n");
+        printf("\t\t\t\t\t\t2.Open Game_play()\n");
+        printf("\t\t\t\t\t\t3.About_creator()\n");
+        printf("\t\t\t\t\t\t4.Exit Project<!0>\n");
+        printf("\t\t\t\t\t\tEnter Content Section: ");
+        scanf("%d",&op);
+        switch (op)
+        {
+        case 1:{
+            system("cls");
+            system("color 02");                      //Modifies system color using predefined color codes.
+            acknowledgement(winning_situation);
+            break;
+        }
+        case 2:{
+            system("cls");
+            rand_arrangement(array);
+            set_game_plate(game_plate,array);
+            game_play(game_plate,array);
+            break;
+        }
+        case 3:{
+            system("cls");
+            About_creator();
+            break;
+        }
+        case 4:{
+            printf("Programme Successfully Terminated!\n");
+            break;
+        }
+
+        default:
+            printf("Invalid Input!\n");
+            break;
+        }
+    }while(op!=4);
+}
+void acknowledgement(int winning_situation[4][4]){
+    printf("\t\t\t\t\t<ACKNOWLEDGEMENT>\n\n");
+    printf("\nI would like to express my special thank of gratitude to my Computer teacher \"MR. SHAURAV SHUKLA SIR\"\n");
+    printf(", my project coordinator \"MR. ADITYA SIR\" and the entire team of iNeuron.ai for their able guidance and support\n in completing my Project. who gave me the golden opportunity to do this wonderful project on the topic \"JUMBLE NUMBERS\".\n\n\n");
+    printf("Press any key to continue......\n");
+    getch();
+    fflush(stdin);
+    printf("\t\t\t\t\t<INTRODUCTION>\n\n");
+    printf("\t\t\t\t    { RULES OF THIS GAME }\n\n");
+    printf("1.You can move only 1 step at a time by arrow key.\n\n");
+    printf("Move Up   :  by Up arrow key.\n");
+    printf("Move Down :  by Down arrow key\n");
+    printf("Move Left :  by Left arrow key.\n");
+    printf("Move Right :  by Right arrow key.\n\n");
+    printf("2.You can move number at empty position only.\n\n");
+    printf("3.For each valid move : Your total number of moves will decrease by 1.\n\n");
+    printf("4.Winning situation : number in a 4x4 matrix should be in order form 1 to 15.\n\n\n");
+    printf("\t\t\t\t\tWinning Situation:\n\n");
+    display(winning_situation);
+    printf("\n\nYou can exit the game any time by pressing 'esc'.\nSo try to win in minimum number of moves.\n\n");
+    printf("\t\t\tHAPPY GAMING , GOOD LUCK!\n\n");
+    printf("---------------------------------------------------------------------------------------------------------------------------------------------\n");
+    printf("Enter any key to continue......\n");
+    getch();
+    fflush(stdin);
+
+
+}
+void About_creator(){
+    printf("\t\t\t\t\tA very warm greetings to all!\nMy name is Darshan kumar,I am a 2nd year b.tech student of GIET UNIVERSITY. My interest towards programming and tech developed when I was in 12th grade, this was the time when I for the first time made an attempt to explore the programming world and no doubt I was overwhelmed by the potential it upholds. I begin my programming journey primarily when I was in my first year of college. I am a tech enthusiast since last two years and am willing to explore this field and also determined to take up software engineer as my career.\n\n");
+    printf("\n------------------------------------------------------------------------------------------------------------------------------------------\n");
+    printf("CONNECT_TO_ME\n");
+    printf("Phone no.-> 7008540962\n");
+    printf("GitHub username-> Iambotcoder (i.e https://github.com/imbotcoder)\n");
+    printf("Linkedln-> Darshan kumar\n\n");
+    printf("Email-> darshkumar1007@gmail.com\n\t\tor\n\t21cse060.darshankumar@giet.edu\n\n");
+    printf("Press any key to continue....\n");
+    getch();
+    fflush(stdin);
+}
+/*Game_paly() function contains the logic codes for execution of the programme*/
+void game_play(int game_plate[4][4],int array[]){
+    int i=3,j=3;
+    char name[20];
+    int moves_limit=10;                  //Number of moves have been kept less for testing purpose.
+    printf("Entre your name: ");
+    scanf("%s",&name);
+
+    while(1){
+        system("CLS");
+        system("color F4");
+        printf("\t\t\t\t\tHELLO %s! WELCOME TO JUMBO_NUMBERS!\n\n",name);
+        printf("\t\t\t\t<-><-><-><-><-><-><-><-><-><-><-><-><-><-><-><-><-><-><-><->\n\n");
+        display(game_plate);
+        printf("Number of moves left: %d",moves_limit);
+        if(moves_limit==0){
+            printf("\nOut of moves!\n");
+            printf("Enter 'y' to refuel your moves or any key to exit:\n");
+            fflush(stdin);
+            if(getch()=='y'){
+                rand_arrangement(array);
+                set_game_plate(game_plate,array);
+                game_play(game_plate,array);
+            }
+            else{
+                exit_message();
+                return;
+            }
+        }
+        printf("\nEnter you move: ");
+
+        switch(getch()){                                //getch() accepts arrow key and return their ascii values.
+            case 72:{                                                  //72 is ascii value for Up_arrow key.
+                if(i>0){
+                    game_plate[i][j]=game_plate[i-1][j];
+                    game_plate[i-1][j]=0;
+                    display(game_plate);
+                    i=i-1;
+                    moves_limit--;
+                    printf("arrow up\n");
+                }
+                else{
+                    printf("Incorrect move!\n");
+                    printf("Enter any key to continue...\n");
+                    getch();
+                    fflush(stdin);
+                }
+                break;
+            }
+            case 80:{                                                   //80 is ascii value for Down_arrow key.
+                if(i<3){
+                    game_plate[i][j]=game_plate[i+1][j];
+                    game_plate[i+1][j]=0;
+                    display(game_plate);
+                    i=i+1;
+                    moves_limit--;
+                    printf("arrow down\n");
+                }
+                else{
+                    printf("Incorrect move!\n");
+                    printf("Enter any key to continue...\n");
+                    getch();
+                    fflush(stdin);
+                }
+
+                break;
+            }
+            case 75:{                                                  // //75 is ascii value for Left_arrow key.
+                if(j>0){
+                    game_plate[i][j]=game_plate[i][j-1];
+                    game_plate[i][j-1]=0;
+                    j=j-1;
+                    display(game_plate);
+                    moves_limit--;
+                    printf("arrow left\n");
+                }
+                else{
+                    printf("Incorrect move!\n");
+                    printf("Enter any key to continue...\n");
+                    getch();
+                    fflush(stdin);
+                }
+                break;
+            }
+            case 77:{                                               //77 is ascii value for Right_arrow key.
+                if(j<3){
+                    game_plate[i][j]=game_plate[i][j+1];
+                    game_plate[i][j+1]=0;
+                    j=j+1;
+                    display(game_plate);
+                    moves_limit--;
+                    printf("arrow right\n");
+                }
+                else{
+                    printf("Incorrect move!\n");
+                    printf("Enter any key to continue...\n");
+                    getch();
+                    fflush(stdin);
+                }
+                break;
+            }
+            case 27:{                                            //27 is ascii code for 'esc' button.
+                exit_message();
+                return;
+            }
+        }
+    }
+}
+void set_game_plate(int game_plate[4][4],int array[]){
+    int k=0;
+    for(int i=0;i<4;i++){
+        for(int j=0;j<4;j++){
+            game_plate[i][j]=array[k];
+            k++;
+        }
+    }
+}
+void rand_arrangement(int arr[]){
+    srand(time(NULL));             //srand() is seeding function for rand() apparently using system time (i.e in seconds).
+    for(int i=0;i<15;i++){
+        int temp=rand()%15;           //Provides random numbers form 0 to 15.
+        int j=arr[i];
+        arr[i]=arr[temp];
+        arr[temp]=j;
+    }
+}
+void display(int game_plate[4][4]){
+
+    int i,j;
+    printf("---------------------------------\n");
+    for(i=0;i<4;i++){
+        for( j=0;j<4;j++){
+            if(game_plate[i][j]!=0){
+
+            printf("|  %d\t|",game_plate[i][j]);
+            }
+            else{
+
+
+                printf("| \t|");
+
+            }
+
+        }
+        printf("\n--------------------------------");
+        printf("\n");
+    }
+    return;
+}
+void exit_message(){
+    printf("GAME TERMINATED!\n");
+    printf("Enter any key....\n");
+
+    getch();
+    return;
+}
+
+
