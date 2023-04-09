@@ -1,264 +1,306 @@
-#include<stdio.h>               //Contains standard input and output function for C.
-#include<stdlib.h>              //Contains srand() and rand() functions.
-#include<time.h>                //Contains time() function.
-#include<conio.h>               //Contains getch() function.
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <time.h>
+#include <string.h>
+#include <windows.h>
 
-void rand_arrangement(int*);                //Randomly arranges number in array.
-void display(int[4][4]);                     //Display Matrix on screen.
-void set_game_plate(int[4][4],int[]);         //Prepares the stage (i.e randomly arranged matrix) for game_play.
-void game_play(int[4][4],int[]);              //Game execution and responses to arrow key are defined in this function.
-void exit_message();
-void acknowledgement(int[4][4]);
-void About_creator();
-void content(int[4][4],int[4][4],int[]);    //Contains contents of project.
-int main(){
-    int array[16]={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
-    int winning_situation[4][4]={0};
-    set_game_plate(winning_situation,array);
+#define ANSI_COLOR_RED "\x1b[31m"
+#define ANSI_COLOR_GREEN "\x1b[32m"
+#define ANSI_COLOR_YELLOW "\x1b[33m"
+#define ANSI_COLOR_BLUE "\x1b[34m"
+#define ANSI_COLOR_MAGENTA "\x1b[35m"
+#define ANSI_COLOR_CYAN "\x1b[36m"
+#define ANSI_COLOR_RESET "\x1b[0m"
 
-    int game_plate[4][4]={0};
+// create matrix 4*4
+void createMatrix(int arr[][4])
+{
+    int n = 15;
+    int num[n], i, j;
+    for (i = 0; i < 15; i++) // These 1-15 number will be in th matrix
+        num[i] = i + 1;
 
-    content(winning_situation,game_plate,array);
+    srand(time(NULL)); // for random number generation
 
-}
-void content(int winning_situation[4][4],int game_plate[4][4],int array[]){
-    int op;
-    do{
-        system("cls");
-        system("color 05");
-        printf("\n\n\n\n\n\n");
-        printf("\t\t\t\t\t\t1.Acknowledgement and Introduction\n");
-        printf("\t\t\t\t\t\t2.Open Game_play()\n");
-        printf("\t\t\t\t\t\t3.About_creator()\n");
-        printf("\t\t\t\t\t\t4.Exit Project<!0>\n");
-        printf("\t\t\t\t\t\tEnter Content Section: ");
-        scanf("%d",&op);
-        switch (op)
+    int lastIndex = n - 1, index;
+
+    for (i = 0; i < 4; i++)
+        for (j = 0; j < 4; j++)
         {
-        case 1:{
-            system("cls");
-            system("color 02");                      //Modifies system color using predefined color codes.
-            acknowledgement(winning_situation);
-            break;
+            if (lastIndex >= 0)
+            {
+                index = rand() % (lastIndex + 1); // idea : performing % operation by (lastIndex+1)
+                arr[i][j] = num[index];           // will give index , so put that num[index] number in matrix
+                num[index] = num[lastIndex--];    // and replace last number with this indexed positioned number
+            }                                     // and finally lastIndex--
         }
-        case 2:{
-            system("cls");
-            rand_arrangement(array);
-            set_game_plate(game_plate,array);
-            game_play(game_plate,array);
-            break;
-        }
-        case 3:{
-            system("cls");
-            About_creator();
-            break;
-        }
-        case 4:{
-            printf("Programme Successfully Terminated!\n");
-            break;
-        }
-
-        default:
-            printf("Invalid Input!\n");
-            break;
-        }
-    }while(op!=4);
+    arr[i - 1][j - 1] = 0; // last number is zero
 }
-void acknowledgement(int winning_situation[4][4]){
-    printf("\t\t\t\t\t<ACKNOWLEDGEMENT>\n\n");
-    printf("\nI would like to express my special thank of gratitude to my Computer teacher \"MR. SHAURAV SHUKLA SIR\"\n");
-    printf(", my project coordinator \"MR. ADITYA SIR\" and the entire team of iNeuron.ai for their able guidance and support\n in completing my Project. who gave me the golden opportunity to do this wonderful project on the topic \"JUMBLE NUMBERS\".\n\n\n");
-    printf("Press any key to continue......\n");
-    getch();
-    fflush(stdin);
-    printf("\t\t\t\t\t<INTRODUCTION>\n\n");
-    printf("\t\t\t\t    { RULES OF THIS GAME }\n\n");
-    printf("1.You can move only 1 step at a time by arrow key.\n\n");
-    printf("Move Up   :  by Up arrow key.\n");
-    printf("Move Down :  by Down arrow key\n");
-    printf("Move Left :  by Left arrow key.\n");
-    printf("Move Right :  by Right arrow key.\n\n");
-    printf("2.You can move number at empty position only.\n\n");
-    printf("3.For each valid move : Your total number of moves will decrease by 1.\n\n");
-    printf("4.Winning situation : number in a 4x4 matrix should be in order form 1 to 15.\n\n\n");
-    printf("\t\t\t\t\tWinning Situation:\n\n");
-    display(winning_situation);
-    printf("\n\nYou can exit the game any time by pressing 'esc'.\nSo try to win in minimum number of moves.\n\n");
-    printf("\t\t\tHAPPY GAMING , GOOD LUCK!\n\n");
-    printf("---------------------------------------------------------------------------------------------------------------------------------------------\n");
-    printf("Enter any key to continue......\n");
-    getch();
-    fflush(stdin);
 
-
-}
-void About_creator(){
-    printf("\t\t\t\t\tA very warm greetings to all!\nMy name is Darshan kumar,I am a 2nd year b.tech student of GIET UNIVERSITY. My interest towards programming and tech developed when I was in 12th grade, this was the time when I for the first time made an attempt to explore the programming world and no doubt I was overwhelmed by the potential it upholds. I begin my programming journey primarily when I was in my first year of college. I am a tech enthusiast since last two years and am willing to explore this field and also determined to take up software engineer as my career.\n\n");
-    printf("\n------------------------------------------------------------------------------------------------------------------------------------------\n");
-    printf("CONNECT_TO_ME\n");
-    printf("Phone no.-> 7008540962\n");
-    printf("GitHub username-> Iambotcoder (i.e https://github.com/imbotcoder)\n");
-    printf("Linkedln-> Darshan kumar\n\n");
-    printf("Email-> darshkumar1007@gmail.com\n\t\tor\n\t21cse060.darshankumar@giet.edu\n\n");
-    printf("Press any key to continue....\n");
-    getch();
-    fflush(stdin);
-}
-/*Game_paly() function contains the logic codes for execution of the programme*/
-void game_play(int game_plate[4][4],int array[]){
-    int i=3,j=3;
-    char name[20];
-    int moves_limit=10;                  //Number of moves have been kept less for testing purpose.
-    printf("Entre your name: ");
-    scanf("%s",&name);
-
-    while(1){
-        system("CLS");
-        system("color F4");
-        printf("\t\t\t\t\tHELLO %s! WELCOME TO JUMBO_NUMBERS!\n\n",name);
-        printf("\t\t\t\t<-><-><-><-><-><-><-><-><-><-><-><-><-><-><-><-><-><-><-><->\n\n");
-        display(game_plate);
-        printf("Number of moves left: %d",moves_limit);
-        if(moves_limit==0){
-            printf("\nOut of moves!\n");
-            printf("Enter 'y' to refuel your moves or any key to exit:\n");
-            fflush(stdin);
-            if(getch()=='y'){
-                rand_arrangement(array);
-                set_game_plate(game_plate,array);
-                game_play(game_plate,array);
-            }
-            else{
-                exit_message();
-                return;
-            }
+// showing matrix
+void showMatrix(int arr[][4])
+{
+    int i, j;
+    printf("--------------------\n");
+    for (i = 0; i < 4; i++)
+    {
+        printf("|");
+        for (j = 0; j < 4; j++)
+        {
+            if (arr[i][j] != 0)
+                printf("%2d | ", arr[i][j]);
+            else
+                printf("   | ");
         }
-        printf("\nEnter you move: ");
-
-        switch(getch()){                                //getch() accepts arrow key and return their ascii values.
-            case 72:{                                                  //72 is ascii value for Up_arrow key.
-                if(i>0){
-                    game_plate[i][j]=game_plate[i-1][j];
-                    game_plate[i-1][j]=0;
-                    display(game_plate);
-                    i=i-1;
-                    moves_limit--;
-                    printf("arrow up\n");
-                }
-                else{
-                    printf("Incorrect move!\n");
-                    printf("Enter any key to continue...\n");
-                    getch();
-                    fflush(stdin);
-                }
-                break;
-            }
-            case 80:{                                                   //80 is ascii value for Down_arrow key.
-                if(i<3){
-                    game_plate[i][j]=game_plate[i+1][j];
-                    game_plate[i+1][j]=0;
-                    display(game_plate);
-                    i=i+1;
-                    moves_limit--;
-                    printf("arrow down\n");
-                }
-                else{
-                    printf("Incorrect move!\n");
-                    printf("Enter any key to continue...\n");
-                    getch();
-                    fflush(stdin);
-                }
-
-                break;
-            }
-            case 75:{                                                  // //75 is ascii value for Left_arrow key.
-                if(j>0){
-                    game_plate[i][j]=game_plate[i][j-1];
-                    game_plate[i][j-1]=0;
-                    j=j-1;
-                    display(game_plate);
-                    moves_limit--;
-                    printf("arrow left\n");
-                }
-                else{
-                    printf("Incorrect move!\n");
-                    printf("Enter any key to continue...\n");
-                    getch();
-                    fflush(stdin);
-                }
-                break;
-            }
-            case 77:{                                               //77 is ascii value for Right_arrow key.
-                if(j<3){
-                    game_plate[i][j]=game_plate[i][j+1];
-                    game_plate[i][j+1]=0;
-                    j=j+1;
-                    display(game_plate);
-                    moves_limit--;
-                    printf("arrow right\n");
-                }
-                else{
-                    printf("Incorrect move!\n");
-                    printf("Enter any key to continue...\n");
-                    getch();
-                    fflush(stdin);
-                }
-                break;
-            }
-            case 27:{                                            //27 is ascii code for 'esc' button.
-                exit_message();
-                return;
-            }
-        }
-    }
-}
-void set_game_plate(int game_plate[4][4],int array[]){
-    int k=0;
-    for(int i=0;i<4;i++){
-        for(int j=0;j<4;j++){
-            game_plate[i][j]=array[k];
-            k++;
-        }
-    }
-}
-void rand_arrangement(int arr[]){
-    srand(time(NULL));             //srand() is seeding function for rand() apparently using system time (i.e in seconds).
-    for(int i=0;i<15;i++){
-        int temp=rand()%15;           //Provides random numbers form 0 to 15.
-        int j=arr[i];
-        arr[i]=arr[temp];
-        arr[temp]=j;
-    }
-}
-void display(int game_plate[4][4]){
-
-    int i,j;
-    printf("---------------------------------\n");
-    for(i=0;i<4;i++){
-        for( j=0;j<4;j++){
-            if(game_plate[i][j]!=0){
-
-            printf("|  %d\t|",game_plate[i][j]);
-            }
-            else{
-
-
-                printf("| \t|");
-
-            }
-
-        }
-        printf("\n--------------------------------");
         printf("\n");
     }
-    return;
-}
-void exit_message(){
-    printf("GAME TERMINATED!\n");
-    printf("Enter any key....\n");
 
-    getch();
-    return;
+    printf("--------------------\n");
 }
 
+// winning check by this function
+int winner(int arr[][4])
+{
+    int i, j, k = 1;
+    for (i = 0; i < 4; i++)
+    {
+        for (j = 0; j < 4; j++, k++)
+            if (arr[i][j] != k && k != 16)
+                break;
+        if (j < 4)
+            break;
+    }
+
+    if (j < 4)
+        return 0;
+    return 1;
+}
+
+// swap function to swap two numbers
+void swap(int *x, int *y)
+{
+    *x = *x + *y;
+    *y = *x - *y;
+    *x = *x - *y;
+    printf("");
+}
+
+// Reads the user input character and return ascii value of that
+int readEnteredKey()
+{
+    char c;
+    c = _getch();
+    if (c == -32)
+        c = _getch();
+
+    return c;
+}
+
+// shift up function
+int shiftUp(int arr[][4])
+{
+    int i, j;
+    for (i = 0; i < 4; i++)
+    {
+        for (j = 0; j < 4; j++)
+            if (arr[i][j] == 0)
+                break;
+        if (j < 4)
+            break;
+    }
+    if (i == 3) // shifting not possible
+        return 0;
+
+    // Successfully swapped two numbers !
+    swap(&arr[i][j], &arr[i + 1][j]);
+    return 1; // Success
+}
+
+int shiftDown(int arr[][4])
+{
+    int i, j;
+    for (i = 0; i < 4; i++)
+    {
+        for (j = 0; j < 4; j++)
+            if (arr[i][j] == 0)
+                break;
+        if (j < 4)
+            break;
+    }
+    if (i == 0) // shifting not possible
+        return 0;
+    swap(&arr[i][j], &arr[i - 1][j]); // swap numbers
+
+    return 1; // shift up success
+}
+
+int shiftRight(int arr[][4])
+{
+    int i, j;
+    for (i = 0; i < 4; i++)
+    {
+        for (j = 0; j < 4; j++)
+            if (arr[i][j] == 0)
+                break;
+        if (j < 4)
+            break;
+    }
+    if (j == 0) // shifting not possible
+        return 0;
+
+    swap(&arr[i][j], &arr[i][j - 1]);
+
+    return 1; // shift up success
+}
+
+int shiftLeft(int arr[][4])
+{
+    int i, j;
+    for (i = 0; i < 4; i++)
+    {
+        for (j = 0; j < 4; j++)
+            if (arr[i][j] == 0)
+                break;
+        if (j < 4)
+            break;
+    }
+
+    if (j == 3) // shifting not possible
+        return 0;
+
+    swap(&arr[i][j], &arr[i][j + 1]);
+    return 1; // shift up success
+}
+
+// Game rules
+void gameRule(int arr[][4])
+{
+    system("cls");
+
+    int i, j, k = 1;
+
+    printf("\t\t  MATRIX PUZZLE\n");
+    printf("\n");
+    printf(ANSI_COLOR_RED "                 RULE OF THIS GAME                 \n" ANSI_COLOR_RESET);
+    printf(ANSI_COLOR_RED "\n1.You can move only 1 step at a time by arrow key " ANSI_COLOR_RESET);
+    printf("\n\tMove Up   : by Up arrow key ");
+    printf("\n\tMove Down : by Down arrow key");
+    printf("\n\tMove Left : by Left arrow key");
+    printf("\n\tMove Right: by Right arrow key");
+
+    printf(ANSI_COLOR_RED "\n2.You can move number at empty position only " ANSI_COLOR_RESET);
+    printf("\n");
+    printf(ANSI_COLOR_RED "\n3. For each valid move : your total number of move will decreased by 1 \n" ANSI_COLOR_RESET);
+    printf(ANSI_COLOR_RED "4. Wining situation : " ANSI_COLOR_RESET);
+    printf(ANSI_COLOR_RED " Number in a 4*4 matrix should be in order from 1 to 15 " ANSI_COLOR_RESET);
+    printf("\n\n            winning situation:         \n");
+
+    printf(ANSI_COLOR_YELLOW "---------------------\n" ANSI_COLOR_RESET);
+
+    for (i = 0; i < 4; i++)
+    {
+        printf(ANSI_COLOR_YELLOW "| " ANSI_COLOR_RESET);
+        for (j = 0; j < 4; j++)
+        {
+            if (arr[i][j] != 0)
+                printf(ANSI_COLOR_YELLOW "%2d | " ANSI_COLOR_RESET, 4 * i + j + 1);
+            else
+                printf(ANSI_COLOR_YELLOW "   |" ANSI_COLOR_RESET);
+        }
+        printf("\n");
+    }
+
+    printf(ANSI_COLOR_YELLOW "---------------------\n" ANSI_COLOR_RESET);
+    printf("\n5.You can exit the game at any time by pressing 'E' or 'e' ");
+
+    printf("\nSo Try to win in minimum no of move \n");
+
+    printf("\nEnter any key to start.....   ");
+
+    int x = readEnteredKey();
+}
+
+// main function
+int main()
+{
+    int arr[4][4];    // matrix
+    int maxTry = 4; // maximum move
+    char name[20];
+    for (int k = 0; k < 3; k++)
+        printf("\n");
+    printf("Player Name: ");
+    scanf("%s", name);
+
+    system("cls"); // to clear screen
+
+    while (1)
+    {
+        createMatrix(arr); // calling function to create  matrix
+        gameRule(arr);     // game rule function calling
+
+        while (!winner(arr)) // checking for winning situation
+        {
+            system("cls");
+            if (!maxTry) // for remaining zero move
+                break;
+
+            printf("\n\n  Player Name:  %s ,  Move remaining : %d\n\n", name, maxTry);
+
+            showMatrix(arr); // show matrix
+
+            int key = readEnteredKey(); // this will return ascii code of user entered key
+
+            switch (key) // maping
+            {
+            case 101: // ascii of E
+
+            case 69: // ascii of e
+                printf("\a\a\a\a\a\a\n     Thanks for Playing ! \n\a");
+                printf("\nHit 'Enter' to exit the game \n");
+                key = readEnteredKey();
+                return 0;
+
+            case 72: // arrow up
+                if (shiftUp(arr))
+                    maxTry--;
+                break;
+            case 80: // arrow down
+                if (shiftDown(arr))
+                    maxTry--;
+                break;
+            case 77: // arrow  right
+                if (shiftRight(arr))
+                    maxTry--;
+                break;
+            case 75: // arrow left
+                if (shiftLeft(arr))
+                    maxTry--;
+                break;
+            default:
+
+                printf("\n\n      \a\a Not Allowed \a");
+            }
+
+        }
+
+        if (!maxTry)
+            printf(ANSI_COLOR_RED "\n\a          YOU LOSE !          \a\a\n" ANSI_COLOR_RESET);
+        else
+            printf(ANSI_COLOR_GREEN "\n\a!!!!!!!!!!!!!Congratulations  %s for winning this game !!!!!!!!!!!!!\n\a" ANSI_COLOR_RESET, name);
+
+        fflush(stdin); // Will clear the buffer
+        char check;
+        printf(ANSI_COLOR_GREEN "\nWant to play again ? \n" ANSI_COLOR_RESET);
+        printf("enter 'y' to play again:  ");
+        scanf("%c", &check);
+
+        // Leave the game here itself !
+        if ((check != 'y') && (check != 'Y'))
+            break;
+
+        maxTry = 4;
+    }
+    return 0;
+}
 
